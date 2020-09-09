@@ -1,3 +1,7 @@
+// Copyright (c) 2020 Sarun Rattanasiri
+// under the 3-Clause BSD License
+// https://opensource.org/licenses/BSD-3-Clause
+
 #include "embeddable_sparx.h"
 
 #define ROTL16(x, r) (((x) << (r)) | (x >> (16 - (r))))
