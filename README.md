@@ -82,6 +82,10 @@ If there is nothing to be done the function would return right away; costing onl
 
 Just clone the repository with submodules and `make run`.
 
+## Limitations
+
+Currently only supporting little-endian CPU, if someone happen to use it on a big-endian one, feel free to send a pull request.
+
 ## More controversy one
 
 The author of this library also authored [Embeddable Speck](https://github.com/the-cave/embeddable-speck) library, implementing an NSA-designed-algorithm, with the exact same API as this one.
