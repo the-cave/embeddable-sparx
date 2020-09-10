@@ -82,6 +82,10 @@ If there is nothing to be done the function would return right away; costing onl
 
 Just clone the repository with submodules and `make run`.
 
+## More controversy one
+
+The author of this library also authored [Embeddable Speck](https://github.com/the-cave/embeddable-speck) library, implementing an NSA-designed-algorithm, with the exact same API as this one.
+
 ## License
 
 Consuming Tester is released under the [BSD 3-Clause License](LICENSE.md). :tada:
