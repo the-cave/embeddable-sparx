@@ -92,4 +92,4 @@ The author of this library also authored [Embeddable Speck](https://github.com/t
 
 ## License
 
-Consuming Tester is released under the [BSD 3-Clause License](LICENSE.md). :tada:
+Embeddable SPARX is released under the [BSD 3-Clause License](LICENSE.md). :tada:
