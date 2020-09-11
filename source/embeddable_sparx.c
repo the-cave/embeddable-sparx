@@ -4,7 +4,7 @@
 
 #include "embeddable_sparx.h"
 
-#define ROTL16(x, r) (((x) << (r)) | (x >> (16 - (r))))
+#define ROTL16(x, r) (((x) << (r)) | ((x) >> (16 - (r))))
 #define ROTR16(x, r) (((x) >> (r)) | ((x) << (16 - (r))))
 #define SWAP(x, y, temp)                                                       \
   temp = x;                                                                    \
@@ -78,11 +78,13 @@ void embeddable_sparx__encryption_poll(
                    EMBEDDABLE_SPARX__ROUND))) {
     uint8_t operation_number = step - 1;
     uint8_t branch = ((operation_number >> 2) & 0x3);
-    volatile uint32_t *operating_word = state->scratch_pad + branch;
+    uint32_t *operating_word = state->scratch_pad + branch;
     (*operating_word) ^= config->key_schedule[operation_number];
-    uint16_t *lower_half = (uint16_t *)operating_word;
-    uint16_t *upper_half = lower_half + 1;
-    SPARX_A(lower_half, upper_half);
+    // avoid strict aliasing
+    uint16_t upper_half = (uint16_t)((*operating_word) >> 16);
+    uint16_t lower_half = (uint16_t)((*operating_word) >> 0);
+    SPARX_A(&lower_half, &upper_half);
+    (*operating_word) = (((uint32_t)(upper_half)) << 16) | lower_half;
     if ((operation_number & 0xf) == 0xf) {
       uint16_t *linear_mixing = (uint16_t *)state->scratch_pad;
       uint16_t temp;
@@ -161,9 +163,11 @@ void embeddable_sparx__decryption_poll(
     }
     uint8_t branch = ((operation_number >> 2) & 0x3);
     uint32_t *operating_word = state->scratch_pad + branch;
-    volatile uint16_t *lower_half = (uint16_t *)operating_word;
-    volatile uint16_t *upper_half = lower_half + 1;
-    SPARX_A_inv(lower_half, upper_half);
+    // avoid strict aliasing
+    uint16_t upper_half = (uint16_t)((*operating_word) >> 16);
+    uint16_t lower_half = (uint16_t)((*operating_word) >> 0);
+    SPARX_A_inv(&lower_half, &upper_half);
+    (*operating_word) = (((uint32_t)(upper_half)) << 16) | lower_half;
     (*operating_word) ^= config->key_schedule[operation_number];
     state->step++;
     return;
